@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import casa from "../assets/house.png";
 import apartamento from "../assets/apartment.png";
 import Cuarto from "./cuarto";
+import { Card, Container, Row, Col } from "react-bootstrap";
+import { FormattedMessage } from "react-intl";
 
 function Espacios() {
   const URL =
@@ -46,50 +48,60 @@ function Espacios() {
 
   function Cuartos() {
     return (
-      <div class="container-fluid">
-        <div class="row">
+      <Container>
+        <Row>
+          <h2>
+            <FormattedMessage id="MySpaces"/>
+          </h2>
+        </Row>
+        <Row xs={2} md={3} lg={4}>
           {espacios.map((espacio, i) => (
-            <div class="col">
-              <div class="card" key={i} onClick={() => displayCuartos(espacio)}>
-                <img
+            <Col>
+              <Card style={{ width: '12rem' }} key={i} onClick={() => displayCuartos(espacio)}>
+                <Card.Img
                   src={getPhoto(espacio)}
-                  class="card-img-top"
+                  variant="top"
                   alt="espacio"
                 />
-                <div class="card-body">
-                  <h6 class="card-title">{espacio.name}</h6>
-                  <small class="card-text">{espacio.address}</small>
-                </div>
-              </div>
-            </div>
+                <Card.Body>
+                  <Card.Title>{espacio.name}</Card.Title>
+                  <Card.Text>{espacio.address}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
           ))}
-        </div>
-        <Cuarto c={cuarto}/>
-      </div>
+        </Row>
+        <Row>
+          <h3>
+            <FormattedMessage id="MyRooms"/>
+          </h3>
+        </Row>
+        <Cuarto c={cuarto} />
+      </Container>
     );
   }
 
   function NoCuartos() {
     return (
-      <div class="container-fluid">
-        <div class="row">
+      <Container>
+        <Row xs={2} md={3} lg={4}>
           {espacios.map((espacio, i) => (
-            <div class="col">
-              <div class="card" key={i} onClick={() => displayCuartos(espacio)}>
-                <img
+            <Col>
+              <Card style={{ width: '12rem' }} key={i} onClick={() => displayCuartos(espacio)}>
+                <Card.Img
                   src={getPhoto(espacio)}
-                  class="card-img-top"
+                  variant="top"
                   alt="espacio"
                 />
-                <div class="card-body">
-                  <h6 class="card-title">{espacio.name}</h6>
-                  <small class="card-text">{espacio.address}</small>
-                </div>
-              </div>
-            </div>
+                <Card.Body>
+                  <Card.Title>{espacio.name}</Card.Title>
+                  <Card.Text>{espacio.address}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
           ))}
-        </div>
-      </div>
+        </Row>
+      </Container>
     );
   }
 

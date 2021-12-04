@@ -38,18 +38,3 @@
     transform: rotate(360deg);
   }
 }
-
-.card{
-  width: 15rem;
-}
-
-.img{
-  width: 5em;
-  height: 5em;
-}
-
-.container-fluid{
-  align-items: flex-end;
-  justify-content: center;
-  display: flex;
-}
