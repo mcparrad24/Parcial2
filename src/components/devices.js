@@ -2,7 +2,6 @@ import { Table, Col } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 
 function Devices(props) {
-  console.log(props);
   return (
     <Col>
       <Table hover>

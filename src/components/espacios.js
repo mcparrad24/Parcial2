@@ -10,7 +10,7 @@ function Espacios() {
     "https://gist.githubusercontent.com/josejbocanegra/0067d2b28b009140fee423cfc84e40e6/raw/6e6b11160fbcacb56621b6422684d615dc3a0d33/spaces.json";
 
   const [espacios, setEspacios] = useState([]);
-  
+
   let espaciosVisitados = [];
 
   /*
@@ -81,18 +81,18 @@ function Espacios() {
       <Container>
         <Row>
           <h2>
-            <FormattedMessage id="MySpaces"/>
+            <FormattedMessage id="MySpaces" />
           </h2>
         </Row>
         <Row xs={2} md={3} lg={4}>
           {espacios.map((espacio, i) => (
             <Col>
-              <Card style={{ width: '12rem' }} key={i} onClick={() => displayCuartos(espacio)}>
-                <Card.Img
-                  src={getPhoto(espacio)}
-                  variant="top"
-                  alt="espacio"
-                />
+              <Card
+                style={{ width: "12rem" }}
+                key={i}
+                onClick={() => displayCuartos(espacio)}
+              >
+                <Card.Img src={getPhoto(espacio)} variant="top" alt="espacio" />
                 <Card.Body>
                   <Card.Title>{espacio.name}</Card.Title>
                   <Card.Text>{espacio.address}</Card.Text>
@@ -103,7 +103,7 @@ function Espacios() {
         </Row>
         <Row>
           <h3>
-            <FormattedMessage id="MyRooms"/>
+            <FormattedMessage id="MyRooms" />
           </h3>
         </Row>
         <Cuarto c={cuarto} />
@@ -114,15 +114,20 @@ function Espacios() {
   function NoCuartos() {
     return (
       <Container>
+        <Row>
+          <h2>
+            <FormattedMessage id="MySpaces" />
+          </h2>
+        </Row>
         <Row xs={2} md={3} lg={4}>
           {espacios.map((espacio, i) => (
             <Col>
-              <Card style={{ width: '12rem' }} key={i} onClick={() => displayCuartos(espacio)}>
-                <Card.Img
-                  src={getPhoto(espacio)}
-                  variant="top"
-                  alt="espacio"
-                />
+              <Card
+                style={{ width: "12rem" }}
+                key={i}
+                onClick={() => displayCuartos(espacio)}
+              >
+                <Card.Img src={getPhoto(espacio)} variant="top" alt="espacio" />
                 <Card.Body>
                   <Card.Title>{espacio.name}</Card.Title>
                   <Card.Text>{espacio.address}</Card.Text>

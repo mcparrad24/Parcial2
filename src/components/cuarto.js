@@ -3,6 +3,7 @@ import kitchen from "../assets/kitchen.png";
 import living from "../assets/living-room.png";
 import dinner from "../assets/dinner-room.png";
 import Device from "./devices";
+import Pie from "./pie";
 import { Card, Col, Row } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 
@@ -11,7 +12,6 @@ function Cuarto(props) {
     "https://gist.githubusercontent.com/josejbocanegra/92c90d5f2171739bd4a76d639f1271ea/raw/9effd124c825f7c2a7087d4a50fa4a91c5d34558/rooms.json";
 
   const [temporales, setTemporales] = useState([]);
-  const [cuartos, setCuartos] = useState([]);
 
   let cuartosTemp = [];
 
@@ -46,13 +46,11 @@ function Cuarto(props) {
 
   function selectCuartos() {
     temporales.forEach((temp) => {
-        if (temp.homeId === props.c.id){
-          cuartos.push(temp)
-        }
-    })
-    setCuartos(cuartosTemp);
-    console.log(cuartos);
-  };
+      if (temp.homeId === props.c.id) {
+        cuartosTemp.push(temp);
+      }
+    });
+  }
 
   function getPhoto(cuarto) {
     let name = String(cuarto.name);
@@ -97,7 +95,7 @@ function Cuarto(props) {
     return (
       <div>
         <Row xs={2} md={3} lg={4}>
-          {cuartos.map((cuarto, i) => (
+          {cuartosTemp.map((cuarto, i) => (
             <Col>
               <Card
                 style={{ width: "10rem" }}
@@ -122,7 +120,14 @@ function Cuarto(props) {
             <FormattedMessage id="Stats" />
           </h3>
         </Row>
-        
+        <Row className="justify-content-center">
+          <h6>
+            <FormattedMessage id="PowerUsage" />
+          </h6>
+        </Row>
+        <Row className="justify-content-center">
+          <Pie c={cuartosTemp} />
+        </Row>
       </div>
     );
   }
@@ -131,7 +136,7 @@ function Cuarto(props) {
     return (
       <div>
         <Row xs={2} md={3} lg={4}>
-          {cuartos.map((cuarto, i) => (
+          {cuartosTemp.map((cuarto, i) => (
             <Col style={{ width: "10rem" }}>
               <Card key={i} onClick={() => displayDevices(cuarto)}>
                 <Card.Body>
@@ -150,6 +155,14 @@ function Cuarto(props) {
           <h3>
             <FormattedMessage id="Stats" />
           </h3>
+        </Row>
+        <Row className="justify-content-center">
+          <h6>
+            <FormattedMessage id="PowerUsage" />
+          </h6>
+        </Row>
+        <Row className="justify-content-center">
+          <Pie c={cuartosTemp} />
         </Row>
       </div>
     );

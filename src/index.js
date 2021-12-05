@@ -14,8 +14,6 @@ let localeLang = "";
 let localeMessages;
 
 function getBrowserLanguage() {
-  console.log("idioma", navigator.language || navigator.userLanguage);
-
   let idioma = navigator.language || navigator.userLanguage;
   if (idioma.startsWith("es")) {
     localeLang = "es";
