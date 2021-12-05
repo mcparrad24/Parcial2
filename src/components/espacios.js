@@ -10,7 +10,10 @@ function Espacios() {
     "https://gist.githubusercontent.com/josejbocanegra/0067d2b28b009140fee423cfc84e40e6/raw/6e6b11160fbcacb56621b6422684d615dc3a0d33/spaces.json";
 
   const [espacios, setEspacios] = useState([]);
+  
+  let espaciosVisitados = [];
 
+  /*
   useEffect(() => {
     fetch(URL)
       .then((res) => res.json())
@@ -18,6 +21,23 @@ function Espacios() {
         console.log("Res", res);
         setEspacios(res);
       });
+  }, []);
+  */
+
+  useEffect(() => {
+    if (!navigator.onLine) {
+      if (localStorage.getItem("espacios") === null) {
+        setEspacios(["Loading..."]);
+      } else {
+        setEspacios(JSON.parse(localStorage.getItem("espacios")));
+      }
+    } else {
+      fetch(URL)
+        .then((res) => res.json())
+        .then((res) => {
+          setEspacios(res);
+        });
+    }
   }, []);
 
   function getPhoto(espacio) {
@@ -35,6 +55,16 @@ function Espacios() {
   const [cuarto, setCuarto] = useState({});
 
   function displayCuartos(espacio) {
+    let esta = 0;
+    espaciosVisitados.forEach((esp) => {
+      if (esp === espacio){
+        esta = 1;
+      }
+    })
+    if (esta === 0){
+      espaciosVisitados.push(espacio);
+    }
+    localStorage.setItem("espacios", JSON.stringify(espaciosVisitados));
     setCuarto(espacio);
     handleShow();
   }

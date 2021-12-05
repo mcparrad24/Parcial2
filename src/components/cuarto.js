@@ -4,15 +4,20 @@ import living from "../assets/living-room.png";
 import dinner from "../assets/dinner-room.png";
 import Device from "./devices";
 import { Card, Col, Row } from "react-bootstrap";
+import { FormattedMessage } from "react-intl";
 
 function Cuarto(props) {
   const URL =
     "https://gist.githubusercontent.com/josejbocanegra/92c90d5f2171739bd4a76d639f1271ea/raw/9effd124c825f7c2a7087d4a50fa4a91c5d34558/rooms.json";
 
   const [temporales, setTemporales] = useState([]);
+  const [cuartos, setCuartos] = useState([]);
 
-  let cuartos = [];
+  let cuartosTemp = [];
 
+  let cuartosVisitados = [];
+
+  /*
   useEffect(() => {
     fetch(URL)
       .then((res) => res.json())
@@ -21,6 +26,23 @@ function Cuarto(props) {
         setTemporales(res);
       })
   }, []);
+  */
+
+  useEffect(() => {
+    if (!navigator.onLine) {
+      if (localStorage.getItem("cuartos") === null) {
+        setTemporales(["Loading..."]);
+      } else {
+        setTemporales(JSON.parse(localStorage.getItem("cuartos")));
+      }
+    } else {
+      fetch(URL)
+        .then((res) => res.json())
+        .then((res) => {
+          setTemporales(res);
+        });
+    }
+  }, []);
 
   function selectCuartos() {
     temporales.forEach((temp) => {
@@ -28,6 +50,7 @@ function Cuarto(props) {
           cuartos.push(temp)
         }
     })
+    setCuartos(cuartosTemp);
     console.log(cuartos);
   };
 
@@ -48,6 +71,16 @@ function Cuarto(props) {
   const [devices, setDevices] = useState({});
 
   function displayDevices(cuarto) {
+    let esta = 0;
+    cuartosVisitados.forEach((cu) => {
+      if (cu === cuarto) {
+        esta = 1;
+      }
+    });
+    if (esta === 0) {
+      cuartosVisitados.push(cuarto);
+    }
+    localStorage.setItem("cuartos", JSON.stringify(cuartosVisitados));
     setDevices(cuarto);
     handleShow();
   }
@@ -62,36 +95,63 @@ function Cuarto(props) {
 
   function Devices() {
     return (
-      <Row xs={2} md={3} lg={4}>
-        {cuartos.map((cuarto, i) => (
-          <Col>
-            <Card style={{ width: '10rem' }} key={i} onClick={() => displayDevices(cuarto)}>
-              <Card.Body>
-                <Card.Title>{cuarto.name}</Card.Title>
-              </Card.Body>
-              <Card.Img src={getPhoto(cuarto)} class="card-img-top" alt="espacio" />
-            </Card>
-          </Col>
-        ))}
-        <Device d={devices} />
-      </Row>
+      <div>
+        <Row xs={2} md={3} lg={4}>
+          {cuartos.map((cuarto, i) => (
+            <Col>
+              <Card
+                style={{ width: "10rem" }}
+                key={i}
+                onClick={() => displayDevices(cuarto)}
+              >
+                <Card.Body>
+                  <Card.Title>{cuarto.name}</Card.Title>
+                </Card.Body>
+                <Card.Img
+                  src={getPhoto(cuarto)}
+                  class="card-img-top"
+                  alt="espacio"
+                />
+              </Card>
+            </Col>
+          ))}
+          <Device d={devices} />
+        </Row>
+        <Row>
+          <h3>
+            <FormattedMessage id="Stats" />
+          </h3>
+        </Row>
+        
+      </div>
     );
   }
 
   function NoDevices() {
     return (
-      <Row xs={2} md={3} lg={4}>
-        {cuartos.map((cuarto, i) => (
-          <Col style={{ width: '10rem' }}>
-            <Card key={i} onClick={() => displayDevices(cuarto)}>
-              <Card.Body>
-                <Card.Title>{cuarto.name}</Card.Title>
-              </Card.Body>
-              <Card.Img src={getPhoto(cuarto)} class="card-img-top" alt="espacio" />
-            </Card>
-          </Col>
-        ))}
-      </Row>
+      <div>
+        <Row xs={2} md={3} lg={4}>
+          {cuartos.map((cuarto, i) => (
+            <Col style={{ width: "10rem" }}>
+              <Card key={i} onClick={() => displayDevices(cuarto)}>
+                <Card.Body>
+                  <Card.Title>{cuarto.name}</Card.Title>
+                </Card.Body>
+                <Card.Img
+                  src={getPhoto(cuarto)}
+                  class="card-img-top"
+                  alt="espacio"
+                />
+              </Card>
+            </Col>
+          ))}
+        </Row>
+        <Row>
+          <h3>
+            <FormattedMessage id="Stats" />
+          </h3>
+        </Row>
+      </div>
     );
   }
 
