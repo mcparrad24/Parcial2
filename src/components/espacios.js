@@ -11,19 +11,6 @@ function Espacios() {
 
   const [espacios, setEspacios] = useState([]);
 
-  let espaciosVisitados = [];
-
-  /*
-  useEffect(() => {
-    fetch(URL)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("Res", res);
-        setEspacios(res);
-      });
-  }, []);
-  */
-
   useEffect(() => {
     if (!navigator.onLine) {
       if (localStorage.getItem("espacios") === null) {
@@ -35,6 +22,14 @@ function Espacios() {
       fetch(URL)
         .then((res) => res.json())
         .then((res) => {
+          if(JSON.parse(localStorage.getItem("espacios")) !== null){
+            if (JSON.parse(localStorage.getItem("espacios")).length === 0){
+              localStorage.setItem("espacios", JSON.stringify([]));
+            }
+          }
+          else{
+            localStorage.setItem("espacios", JSON.stringify([]));
+          }
           setEspacios(res);
         });
     }
@@ -56,13 +51,21 @@ function Espacios() {
 
   function displayCuartos(espacio) {
     let esta = 0;
-    espaciosVisitados.forEach((esp) => {
-      if (esp === espacio){
-        esta = 1;
+    let espaciosVisitados = JSON.parse(localStorage.getItem("espacios"));
+
+    if (espaciosVisitados !== null){
+      espaciosVisitados.forEach((esp) => {
+        if (esp.id === espacio.id) {
+          esta = 1;
+        }
+      });
+      if (esta === 0) {
+        espaciosVisitados.push(espacio);
       }
-    })
-    if (esta === 0){
-      espaciosVisitados.push(espacio);
+    }
+    else{
+      espaciosVisitados = [];
+      espaciosVisitados.push(cuarto);
     }
     localStorage.setItem("espacios", JSON.stringify(espaciosVisitados));
     setCuarto(espacio);
@@ -84,11 +87,12 @@ function Espacios() {
             <FormattedMessage id="MySpaces" />
           </h2>
         </Row>
+        <br/>
         <Row xs={2} md={3} lg={4}>
           {espacios.map((espacio, i) => (
             <Col>
               <Card
-                style={{ width: "12rem" }}
+                style={{ width: "12rem", margin: "1rem" }}
                 key={i}
                 onClick={() => displayCuartos(espacio)}
               >
@@ -101,11 +105,13 @@ function Espacios() {
             </Col>
           ))}
         </Row>
+        <br/>
         <Row>
           <h3>
             <FormattedMessage id="MyRooms" />
           </h3>
         </Row>
+        <br/>
         <Cuarto c={cuarto} />
       </Container>
     );
@@ -119,11 +125,12 @@ function Espacios() {
             <FormattedMessage id="MySpaces" />
           </h2>
         </Row>
+        <br/>
         <Row xs={2} md={3} lg={4}>
           {espacios.map((espacio, i) => (
             <Col>
               <Card
-                style={{ width: "12rem" }}
+                style={{ width: "12rem", margin: "1rem" }}
                 key={i}
                 onClick={() => displayCuartos(espacio)}
               >

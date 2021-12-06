@@ -15,19 +15,6 @@ function Cuarto(props) {
 
   let cuartosTemp = [];
 
-  let cuartosVisitados = [];
-
-  /*
-  useEffect(() => {
-    fetch(URL)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("Res", res);
-        setTemporales(res);
-      })
-  }, []);
-  */
-
   useEffect(() => {
     if (!navigator.onLine) {
       if (localStorage.getItem("cuartos") === null) {
@@ -39,6 +26,14 @@ function Cuarto(props) {
       fetch(URL)
         .then((res) => res.json())
         .then((res) => {
+          if(JSON.parse(localStorage.getItem("cuartos")) !== null){
+            if (JSON.parse(localStorage.getItem("cuartos")).length === 0){
+              localStorage.setItem("cuartos", JSON.stringify([]));
+            }
+          }
+          else{
+            localStorage.setItem("cuartos", JSON.stringify([]));
+          }
           setTemporales(res);
         });
     }
@@ -70,14 +65,23 @@ function Cuarto(props) {
 
   function displayDevices(cuarto) {
     let esta = 0;
-    cuartosVisitados.forEach((cu) => {
-      if (cu === cuarto) {
-        esta = 1;
+    let cuartosVisitados = JSON.parse(localStorage.getItem("cuartos"));
+
+    if (cuartosVisitados !== null){
+      cuartosVisitados.forEach((cu) => {
+        if ((cu.homeId === cuarto.homeId) && (cu.name === cuarto.name)) {
+          esta = 1;
+        }
+      });
+      if (esta === 0) {
+        cuartosVisitados.push(cuarto);
       }
-    });
-    if (esta === 0) {
+    }
+    else{
+      cuartosVisitados = [];
       cuartosVisitados.push(cuarto);
     }
+    console.log("aqui cuartos 9");
     localStorage.setItem("cuartos", JSON.stringify(cuartosVisitados));
     setDevices(cuarto);
     handleShow();
@@ -98,7 +102,7 @@ function Cuarto(props) {
           {cuartosTemp.map((cuarto, i) => (
             <Col>
               <Card
-                style={{ width: "10rem" }}
+                style={{ width: "10rem", margin: "1rem" }}
                 key={i}
                 onClick={() => displayDevices(cuarto)}
               >
@@ -115,16 +119,19 @@ function Cuarto(props) {
           ))}
           <Device d={devices} />
         </Row>
+        <br/>
         <Row>
           <h3>
             <FormattedMessage id="Stats" />
           </h3>
         </Row>
+        <br/>
         <Row className="justify-content-center">
           <h6>
             <FormattedMessage id="PowerUsage" />
           </h6>
         </Row>
+        <br/>
         <Row className="justify-content-center">
           <Pie c={cuartosTemp} />
         </Row>
@@ -137,7 +144,7 @@ function Cuarto(props) {
       <div>
         <Row xs={2} md={3} lg={4}>
           {cuartosTemp.map((cuarto, i) => (
-            <Col style={{ width: "10rem" }}>
+            <Col style={{ width: "10rem", marginBottom: "1rem" }}>
               <Card key={i} onClick={() => displayDevices(cuarto)}>
                 <Card.Body>
                   <Card.Title>{cuarto.name}</Card.Title>
@@ -151,16 +158,19 @@ function Cuarto(props) {
             </Col>
           ))}
         </Row>
+        <br/>
         <Row>
           <h3>
             <FormattedMessage id="Stats" />
           </h3>
         </Row>
+        <br/>
         <Row className="justify-content-center">
           <h6>
             <FormattedMessage id="PowerUsage" />
           </h6>
         </Row>
+        <br/>
         <Row className="justify-content-center">
           <Pie c={cuartosTemp} />
         </Row>
